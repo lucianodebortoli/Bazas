@@ -16,25 +16,30 @@
     android:paddingRight="8dp"
     tools:context=".MainActivity">
 
-
     <TextView
-        android:id="@+id/Bazastitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="@string/appName"
-        android:textSize="30sp"
+        android:text="Game Mode"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Spinner
+        android:id="@+id/modeSpinner"
+        android:layout_width="match_parent"
+        android:paddingBottom="@dimen/default_gap"
+        android:layout_height="wrap_content" />
+
     <TextView
-        android:id="@+id/playersTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Number of players"
+        android:text="Players"
         android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -42,49 +47,17 @@
     <Spinner
         android:id="@+id/playersSpinner"
         android:layout_width="match_parent"
+        android:paddingBottom="@dimen/default_gap"
         android:layout_height="wrap_content" />
 
-    <View
-        android:id="@+id/hline_bazas"
-        android:layout_marginTop="@dimen/default_gap"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#c0c0c0"/>
 
-    <TextView
-        android:id="@+id/roundTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Round"
-        android:textSize="20sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/currentRoundTV"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="N"
-        android:textSize="20sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:id="@+id/hline_round"
-        android:layout_marginTop="@dimen/default_gap"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#c0c0c0"/>
 
     <Button
         android:id="@+id/setNameButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/default_gap"
+        android:background="@drawable/round_button"
         android:text="Set name">
     </Button>
 
@@ -190,7 +163,25 @@
         </LinearLayout>
     </GridLayout>
 
+    <View
+        android:id="@+id/hline_bazas"
+        android:layout_marginTop="@dimen/default_gap"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#c0c0c0"/>
 
+
+
+    <TextView
+        android:id="@+id/currentRoundTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="N"
+        android:textSize="20sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/hline_players"
@@ -199,6 +190,7 @@
         android:layout_height="2dp"
         android:background="#c0c0c0"/>
 
+
     <TextView
         android:id="@+id/callTitle"
         android:layout_width="match_parent"
@@ -206,6 +198,7 @@
         android:layout_marginTop="8dp"
         android:text="Call"
         android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -225,12 +218,14 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingBottom="@dimen/default_gap"
             >
             <Button
                 android:id="@+id/minusCallButton"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="0.3"
+                android:background="@drawable/round_button"
                 android:text="@string/left" />
 
             <TextView
@@ -249,8 +244,9 @@
             <Button
                 android:id="@+id/plusCallButton"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="0.3"
+                android:background="@drawable/round_button"
                 android:text="@string/right" />
 
         </LinearLayout>
@@ -263,6 +259,7 @@
         android:layout_marginTop="@dimen/default_gap"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/round_button"
         android:text="COMMIT CALLS" />
 
     <View
@@ -280,6 +277,7 @@
         android:layout_marginTop="8dp"
         android:text="Win"
         android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -299,12 +297,14 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingBottom="@dimen/default_gap"
             >
             <Button
                 android:id="@+id/minusWinButton"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="0.3"
+                android:background="@drawable/round_button"
                 android:text="@string/left" />
 
             <TextView
@@ -323,8 +323,9 @@
             <Button
                 android:id="@+id/plusWinButton"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="0.3"
+                android:background="@drawable/round_button"
                 android:text="@string/right" />
 
         </LinearLayout>
@@ -336,6 +337,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="12dp"
+        android:background="@drawable/round_button"
         android:text="COMMIT WON" />
 
     <View

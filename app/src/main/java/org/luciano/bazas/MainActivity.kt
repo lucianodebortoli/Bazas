@@ -13,7 +13,8 @@ import org.w3c.dom.Text
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var playersSpinner: Spinner;
+    private lateinit var playersSpinner: Spinner
+    private lateinit var modeSpinner: Spinner
     private lateinit var currentRoundTV: TextView;
     private lateinit var player1Button: Button
     private lateinit var player2Button: Button
@@ -23,8 +24,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var player2Pts: TextView
     private lateinit var player3Pts: TextView
     private lateinit var player4Pts: TextView
-    private lateinit var playerTitle: TextView
-    private lateinit var roundTitle: TextView
     private lateinit var callTitle: TextView
     private lateinit var winTitle: TextView
     private lateinit var minusCallButton: Button
@@ -37,16 +36,20 @@ class MainActivity : AppCompatActivity() {
     private lateinit var commitWonButton: Button
     private lateinit var setNameButton: Button
     private lateinit var hLineBazas: View
-    private lateinit var hLineRound: View
     private lateinit var hLinePlayers: View
     private lateinit var hLineCalled: View
     private lateinit var hLineWin: View
 
     private var currentPlayers = 0
+    private var currentMode = ""
     private var players = mutableListOf<Player>()
     private lateinit var currentPlayer: Player
     private var rounds = mutableListOf<Int>()
+    private var triumph = mutableListOf<Int>()
+    private var weights = mutableListOf<Int>()
     private var currentRound = 1
+    private var currentTriumph = 1
+    private var currentWeight = 0
     private var gameFinished = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,11 +58,12 @@ class MainActivity : AppCompatActivity() {
         findViews()
         hideAll()
         initButtons()
-        initSpinner()
+        initSpinners()
     }
 
     private fun findViews() {
         playersSpinner =findViewById(R.id.playersSpinner)
+        modeSpinner=findViewById(R.id.modeSpinner)
         currentRoundTV=findViewById(R.id.currentRoundTV)
         player1Button=findViewById(R.id.player1Button)
         player2Button=findViewById(R.id.player2Button)
@@ -79,19 +83,15 @@ class MainActivity : AppCompatActivity() {
         currentWinTV=findViewById(R.id.currentWinTV)
         setNameButton=findViewById(R.id.setNameButton)
         hLineBazas=findViewById(R.id.hline_bazas)
-        hLineRound=findViewById(R.id.hline_round)
         hLinePlayers=findViewById(R.id.hline_players)
         hLineCalled=findViewById(R.id.hline_called)
         hLineWin=findViewById(R.id.hline_win)
-        playerTitle=findViewById(R.id.playersTitle)
-        roundTitle=findViewById(R.id.roundTitle)
         callTitle=findViewById(R.id.callTitle)
         winTitle=findViewById(R.id.winTitle)
     }
 
     private fun hideAll() {
         val viewsToHide = mutableListOf(
-            playersTitle,
             currentRoundTV,
             player1Button,
             player2Button,
@@ -111,11 +111,9 @@ class MainActivity : AppCompatActivity() {
             currentWinTV,
             commitWonButton,
             hLineBazas,
-            hLineRound,
             hLinePlayers,
             hLineCalled,
             hLineWin,
-            roundTitle,
             callTitle,
             winTitle
         )
@@ -125,11 +123,25 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun initSpinner() {
-        val adapter: ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(
+    private fun initSpinners() {
+        // Mode Spinner:
+        val modeAdapter: ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(
+            this, R.array.modes, android.R.layout.simple_spinner_item)
+        modeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        modeSpinner.adapter = modeAdapter
+        modeSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(p0: AdapterView<*>?) {}
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
+                val itemSelected = parent!!.getItemAtPosition(pos).toString()
+                setMode(itemSelected)
+            }
+        }
+
+        // Players Spinner:
+        val playerAdapter: ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(
             this, R.array.players, android.R.layout.simple_spinner_item)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        playersSpinner.adapter = adapter
+        playerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        playersSpinner.adapter = playerAdapter
         playersSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(p0: AdapterView<*>?) {}
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
@@ -138,6 +150,7 @@ class MainActivity : AppCompatActivity() {
                     //Do nothing
                 } else {
                     setRounds(itemSelected.toInt())
+                    startApp()
                 }
             }
         }
@@ -145,21 +158,45 @@ class MainActivity : AppCompatActivity() {
 
     private fun setRounds(numberOfPlayers: Int) {
         currentPlayers = numberOfPlayers
-        if (currentPlayers==3)
+        if (currentPlayers==3){
             rounds = mutableListOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 8, 7, 6, 5, 4, 3, 2, 1)
-        else if (currentPlayers==4)
-            rounds = mutableListOf(1, 2, 3, 4, 5, 6, 7, 8, 7, 6, 5, 4, 3, 2, 1)
-        startApp()
-        playersSpinner.isEnabled = false
+            triumph = mutableListOf(1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1)
+            val classicWeights = mutableListOf(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10)
+            val linearWeights =  mutableListOf(11, 12, 13, 14, 15, 16, 17, 18, 19, 19, 18, 17, 16, 15, 14, 13, 12, 11)
+            val stepWeights =    mutableListOf(5, 5, 5, 5, 5, 10, 10, 10, 10, 10, 10, 10, 10, 5, 5, 5, 5, 5)
+            when (currentMode){
+                "Classic" -> weights = classicWeights
+                "Linear" -> weights = linearWeights
+                "Step" -> weights = stepWeights
+            }
+        }
+        else if (currentPlayers==4){
+            rounds =  mutableListOf(1, 2, 3, 4, 5, 6, 7, 8, 7, 6, 5, 4, 3, 2, 1)
+            triumph = mutableListOf(1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1)
+            val classicWeights = mutableListOf(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10)
+            val linearWeights =  mutableListOf(11, 12, 13, 14, 15, 16, 17, 18, 17, 16, 15, 14, 13, 25, 11)
+            val stepWeights =    mutableListOf(5, 5, 5, 5, 5, 10, 10, 10, 10, 10, 10, 5, 5, 5, 5, 5)
+            when (currentMode){
+                "Classic" -> weights = classicWeights
+                "Linear" -> weights = linearWeights
+                "Step" -> weights = stepWeights
+            }
+        }
+    }
+
+    private fun setMode(mode: String) {
+        currentMode = mode
     }
 
     private fun startApp(){
+        modeSpinner.isEnabled = false
+        playersSpinner.isEnabled = false
+        enableCallStage(true)
+        enableWinStage(false)
         initPlayers()
         showAll()
         updateUI()
-        enableCallStage(true)
-        enableWinStage(false)
-        nextRound()
+        onNextRound()
     }
 
     private fun initPlayers(){
@@ -189,7 +226,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun showAll() {
         val viewsToShow = mutableListOf(
-            playersTitle,
             currentRoundTV,
             minusCallButton,
             plusCallButton,
@@ -201,13 +237,11 @@ class MainActivity : AppCompatActivity() {
             currentWinTV,
             commitWonButton,
             hLineBazas,
-            hLineRound,
             hLinePlayers,
             hLineCalled,
             hLineWin,
             callTitle,
-            winTitle,
-            roundTitle
+            winTitle
         )
 
         viewsToShow.forEach{
@@ -296,6 +330,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("ShowToast")
     private fun commitWonButtonClicked() {
         Log.d("Main", "commitWonButtonClicked")
         val isValid = checkValidWon()
@@ -305,21 +340,23 @@ class MainActivity : AppCompatActivity() {
                 it.pushWin()
                 it.reset()
             }
-            nextRound()
-            // Go to Call Stage:
-            enableCallStage(true)
-            enableWinStage(false)
-            updateUI()
+            gameFinished = checkGameFinished()
+            if (gameFinished) {
+                onGameFinished()
+            } else {
+                onNextRound()
+            }
         } else {
             Toast.makeText(this@MainActivity, "Invalid won. Try again", Toast.LENGTH_SHORT)
             Log.d("Main","Invalid won. Try again" )
         }
     }
 
-    private fun checkValidCall(): Boolean {
-        if (gameFinished)
-            return false
+    private fun checkGameFinished(): Boolean {
+        return rounds.isEmpty()
+    }
 
+    private fun checkValidCall(): Boolean {
         // Check total calls:
         var totalCalls = 0
         players.forEach{
@@ -329,9 +366,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkValidWon(): Boolean {
-        if (gameFinished)
-            return false
-
         // Check total won:
         var checkSum = 0
         players.forEach{
@@ -349,41 +383,79 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Add bonus points:
-        val bonusPts = if (currentRound<=5) { 5 } else { 10 }
         players.forEach{
             if (it.currentCall==it.currentWin) {
-                it.addPoints(bonusPts)
+                it.addPoints(currentWeight)
             }
         }
     }
 
-    private fun nextRound() {
-        if(rounds.isNotEmpty()){
-            currentRound = rounds.removeAt(0)
-            Log.d("Main", "currentRound on $currentRound")
-        }
-        else{
-            gameFinished()
-        }
+    private fun onNextRound() {
+        enableCallStage(true)
+        enableWinStage(false)
+        currentRound = rounds.removeAt(0)
+        currentTriumph = triumph.removeAt(0)
+        currentWeight = weights.removeAt(0)
+        Log.d("Main", "currentRound on $currentRound")
+        updateUI()
     }
 
-
-    private fun gameFinished()
-    {
+    private fun onGameFinished() {
         enableCallStage(false)
         enableWinStage(false)
-        currentRoundTV.text="Game Finished"
-        gameFinished = true
-        Log.d("Main", "Game Finished")
+        Log.d("Main", "onGameFinished")
+        updateUI()
     }
 
-    private fun updateUI() {
-        // Update texts:
-        currentRoundTV.text = "$currentRound"
-        currentCallTV.text = currentPlayer.currentCall.toString()
-        currentWinTV.text = currentPlayer.currentWin.toString()
+    private fun findWinnerIndex(): Int {
+        var maxPoints = players[0].points
+        var winner = 0
+        players.forEach{
+            if (it.points> maxPoints)
+                maxPoints = it.points
+        }
+        players.forEach{
+            if(it.points == maxPoints) {
+                winner = it.index
+            }
+        }
+        return winner
+    }
 
-        // Update Buttons:
+    @SuppressLint("SetTextI18n")
+    private fun updateUI() {
+
+        // Update Points:
+        val scores = mutableListOf<TextView>(
+            player1Pts,
+            player2Pts,
+            player3Pts,
+            player4Pts
+        )
+        scores.forEachIndexed{index, tv ->
+            tv.text = players[index].points.toString()
+        }
+
+        // Update Titles:
+        callTitle.text = "Calls (Table: ${getCallsSum()})"
+        winTitle.text = "Wins (Table: ${getWinsSum()})"
+
+        if (gameFinished) {
+            val winner = players[findWinnerIndex()]
+            val count = winner.countCorrect()
+            val msg = "${winner.name} won. with $count correct hands"
+            currentRoundTV.text = msg
+            currentRoundTV.setTextColor(resources.getColor(R.color.colorPrimary))
+            Log.d("Main", msg)
+        } else {
+            // Update texts:
+            val triumphSymbol = if(currentTriumph==1) {"⦿"} else {"⦾" }
+            currentRoundTV.text = "Round: $currentRound  $triumphSymbol"
+            currentCallTV.text = currentPlayer.currentCall.toString()
+            currentWinTV.text = currentPlayer.currentWin.toString()
+        }
+
+        // Update Button Appearance:
         val buttons = mutableListOf<Button>(
             player1Button,
             player2Button,
@@ -399,17 +471,22 @@ class MainActivity : AppCompatActivity() {
                 button.setTextColor(resources.getColor(R.color.colorWhite))
             }
         }
+    }
 
-        // Update Points:
-        val scores = mutableListOf<TextView>(
-            player1Pts,
-            player2Pts,
-            player3Pts,
-            player4Pts
-        )
-        scores.forEachIndexed{index, tv ->
-            tv.text = players[index].points.toString()
+    private fun getCallsSum(): Int {
+        var totalCalls = 0
+        players.forEach{
+            totalCalls += it.currentCall
         }
+        return totalCalls
+    }
+
+    private fun getWinsSum(): Int {
+        var totalWins = 0
+        players.forEach{
+            totalWins += it.currentWin
+        }
+        return totalWins
     }
 
 
@@ -444,7 +521,6 @@ class MainActivity : AppCompatActivity() {
         currentPlayer = players[playerID.ordinal]
         updateUI()
     }
-
 
     // TODO: add logic for preventing total call == round
 

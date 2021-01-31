@@ -38,4 +38,15 @@ class Player(name: String, index: Int) {
     fun addPoints(pts: Int) {
         points += pts
     }
+
+    fun countCorrect(): Int{
+        var correctAnswers = 0
+        for (i in 0 until winArray.size) {
+            if (calledArray[i] == winArray[i]) {
+                correctAnswers += 1
+            }
+        }
+        return correctAnswers
+    }
+
 }

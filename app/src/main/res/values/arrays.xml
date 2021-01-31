@@ -6,4 +6,10 @@
         <item>4</item>
     </string-array>
 
+    <string-array name="modes">
+        <item>Classic</item>
+        <item>Linear</item>
+        <item>Step</item>
+    </string-array>
+
 </resources>
