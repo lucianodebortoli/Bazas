@@ -217,7 +217,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Store new players:
-        for (index in 0..currentPlayers) {
+        for (index in 0 until currentPlayers) {
             val playerName: String = "Player "+(index+1)
             players.add(Player(playerName, index))
         }
@@ -274,9 +274,10 @@ class MainActivity : AppCompatActivity() {
 
         with(builder) {
             setTitle("Edit Player")
-            setPositiveButton("OK") { dialog, which ->
+            setPositiveButton("OK") { _, _ ->
                 currentPlayer.name = editText.text.toString()
                 Log.i("Main", "Positive Button Clicked")
+                updateUI()
             }
             setNegativeButton("Cancel") { dialog, which ->
                 Log.i("Main", "Negative Button Clicked")
@@ -284,7 +285,6 @@ class MainActivity : AppCompatActivity() {
             setView(dialogLayout)
             show()
         }
-        updateUI()
     }
 
     private fun plusWinButtonClicked() {
@@ -426,13 +426,15 @@ class MainActivity : AppCompatActivity() {
     private fun updateUI() {
 
         // Update Points:
-        val scores = mutableListOf<TextView>(
+        val playerScores = mutableListOf<TextView>(
             player1Pts,
             player2Pts,
-            player3Pts,
-            player4Pts
+            player3Pts
         )
-        scores.forEachIndexed{index, tv ->
+        if (currentPlayers==4)
+            playerScores.add(player4Pts)
+
+        playerScores.forEachIndexed{index, tv ->
             tv.text = players[index].points.toString()
         }
 
@@ -443,7 +445,7 @@ class MainActivity : AppCompatActivity() {
         if (gameFinished) {
             val winner = players[findWinnerIndex()]
             val count = winner.countCorrect()
-            val msg = "${winner.name} won. with $count correct hands"
+            val msg = "${winner.name} won with $count correct hands"
             currentRoundTV.text = msg
             currentRoundTV.setTextColor(resources.getColor(R.color.colorPrimary))
             Log.d("Main", msg)
@@ -459,9 +461,10 @@ class MainActivity : AppCompatActivity() {
         val buttons = mutableListOf<Button>(
             player1Button,
             player2Button,
-            player3Button,
-            player4Button
+            player3Button
         )
+        if (currentPlayers==4)
+            buttons.add(player4Button)
         buttons.forEachIndexed{ index, button ->
             button.setBackgroundColor(resources.getColor(R.color.colorIdle))
             button.setTextColor(resources.getColor(R.color.colorBlack))
