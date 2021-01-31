@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <array name="players">
+    <string-array name="players">
+        <item>Select Number of Players</item>
         <item>3</item>
         <item>4</item>
-    </array>
-
+    </string-array>
 
 </resources>
