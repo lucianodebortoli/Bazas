@@ -26,8 +26,16 @@ class Player(name: String, index: Int) {
         calledArray.add(currentCall)
     }
 
+    fun removeCall() {
+        calledArray.removeAt(calledArray.size-1)
+    }
+
     fun pushWin() {
         winArray.add(currentWin)
+    }
+
+    fun removeWin() {
+        winArray.removeAt(winArray.size-1)
     }
 
     fun reset(){
