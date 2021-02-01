@@ -293,8 +293,6 @@ class MainActivity : AppCompatActivity() {
         val isValid = game.checkValidCall()
         if (isValid){
             game.commitCalls()
-
-            // Go to Win Stage:
             updateUI()
             enableCallStage(false)
             enableWinStage(true)
@@ -319,7 +317,8 @@ class MainActivity : AppCompatActivity() {
         val isValid = game.checkValidWon()
         if (isValid){
             game.commitWins()
-            commitWinsButton.isEnabled = false
+            updateUI()
+            enableWinStage(false)
             unCommitWinsButton.isEnabled = true
             nextRoundButton.isEnabled = true
         } else {
