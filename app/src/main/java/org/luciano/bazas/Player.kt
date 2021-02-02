@@ -16,6 +16,7 @@ class Player(name: String, index: Int) {
     var currentWin: Int  = 0
     var calledArray = mutableListOf<Int>()
     var winArray = mutableListOf<Int>()
+    var pointsArray = mutableListOf<Int>()
 
     init {
         this.name = name
@@ -45,9 +46,11 @@ class Player(name: String, index: Int) {
 
     fun addPoints(pts: Int) {
         points += pts
+        pointsArray.add(pts)
     }
 
     fun countCorrect(): Int{
+        // TODO revisar para caso 3
         var correctAnswers = 0
         for (i in 0 until winArray.size) {
             if (calledArray[i] == winArray[i]) {

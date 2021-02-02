@@ -336,6 +336,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun nextRoundButtonClicked() {
+        Log.d("Main","nextRoundButtonClicked")
         game.computePoints()
         if (game.isFinished()) {
             onGameFinished()
@@ -348,7 +349,6 @@ class MainActivity : AppCompatActivity() {
         enableCallStage(true)
         enableWinStage(false)
         game.nextRound()
-        Log.d("Main", "currentRound on ${game.currentRound}")
         updateUI()
         nextRoundButton.isEnabled = false
     }
@@ -386,6 +386,7 @@ class MainActivity : AppCompatActivity() {
             val msg = "${winner.name} won with $count correct hands"
             currentRoundTV.text = msg
             currentRoundTV.setTextColor(resources.getColor(R.color.colorPrimary))
+            nextRoundButton.isEnabled = false
             Log.d("Main", msg)
         } else {
             // Update texts:
@@ -417,7 +418,7 @@ class MainActivity : AppCompatActivity() {
         buttons.forEachIndexed(){index, button ->
             button.setTextColor(resources.getColor(R.color.colorBlack))
             if(index+1 == game.currentHand) {
-                button.setTextColor(resources.getColor(R.color.colorAccent))
+                button.setTextColor(resources.getColor(R.color.colorHandLight))
             }
         }
     }
