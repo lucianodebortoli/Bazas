@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#2196F3</color>
-    <color name="colorPrimaryDark">#1B6EAF</color>
-    <color name="colorAccent">#2196F3</color>
-    <color name="colorHandLight">#CDDC39</color>
-    <color name="colorHandDark">#6A711F</color>
-    <color name="colorSelected">#2196F3</color>
-    <color name="colorIdle">#DBEFFF</color>
+    <color name="colorPrimary">#FB206A</color>
+    <color name="colorPrimaryDark">#AF174B</color>
+    <color name="colorAccent">#F3588D</color>
+    <color name="colorHandLight">#FFF27C</color>
+    <color name="colorHandDark">#937418</color>
+    <color name="colorSelected">#FFA4C3</color>
+    <color name="colorIdle">#FFD0E0</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#393939</color>
 </resources>

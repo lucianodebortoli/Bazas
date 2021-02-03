@@ -1,15 +1,16 @@
 package org.luciano.bazas
 
 import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
+import android.os.HandlerThread
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.view.*
-import org.w3c.dom.Text
+import androidx.appcompat.app.AppCompatActivity
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -45,7 +46,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var hLineWin: View
 
     private lateinit var game: Game
-
+    private var backgroundThread: HandlerThread? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +56,35 @@ class MainActivity : AppCompatActivity() {
         game = Game()
         initButtons()
         initSpinners()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        startBackgroundThread()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+    override fun onStop() {
+        super.onStop()
+        stopBackgroundThread()
+    }
+
+
+    private fun startBackgroundThread() {
+        backgroundThread = HandlerThread("BackgroundThread")
+        backgroundThread!!.start()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+    private fun stopBackgroundThread() {
+        backgroundThread!!.quitSafely()
+        try {
+            backgroundThread!!.join()
+            backgroundThread = null
+            //backgroundHandler = null;
+        } catch (e: InterruptedException) {
+            Log.e("Main","Interrupted when stopping background thread", e)
+        }
     }
 
     private fun findViews() {
@@ -404,21 +434,25 @@ class MainActivity : AppCompatActivity() {
         )
         if (game.currentPlayers==4)
             buttons.add(player4Button)
+
         buttons.forEachIndexed{ index, button ->
+            // Names
+            button.text = game.players[index].name
+            // Idle Behaviour
             button.setBackgroundColor(resources.getColor(R.color.colorIdle))
             button.setTextColor(resources.getColor(R.color.colorBlack))
-            button.text = game.players[index].name
-            if (game.currentPlayer.index == index) {
-                button.setBackgroundColor(resources.getColor(R.color.colorPrimary))
-                button.setTextColor(resources.getColor(R.color.colorWhite))
-            }
-        }
-
-        // Show hand:
-        buttons.forEachIndexed(){index, button ->
-            button.setTextColor(resources.getColor(R.color.colorBlack))
+            // Show hand
             if(index+1 == game.currentHand) {
-                button.setTextColor(resources.getColor(R.color.colorHandLight))
+                button.setTextColor(resources.getColor(R.color.colorPrimary))
+            }
+            // Selected
+            if (game.currentPlayer.index == index) {
+                button.setTextColor(resources.getColor(R.color.colorWhite))
+                button.setBackgroundColor(resources.getColor(R.color.colorPrimary))
+                // Hand And Selected
+                if(index+1 == game.currentHand) {
+                    button.setTextColor(resources.getColor(R.color.colorHandLight))
+                }
             }
         }
     }
