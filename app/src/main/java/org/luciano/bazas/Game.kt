@@ -42,7 +42,7 @@ class Game {
             hand =    mutableListOf(1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3)
             val classicWeights = mutableListOf(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10)
             val linearWeights =  mutableListOf(11, 12, 13, 14, 15, 16, 17, 18, 17, 16, 15, 14, 13, 12, 11)
-            val stepWeights =    mutableListOf(5 , 5 , 5 , 5 , 5,  10 ,10, 10, 10, 10, 10, 5,  5,  5,  5)
+            val stepWeights =    mutableListOf(5 , 5 , 5 , 5 , 5,  10 ,10, 10, 10, 10, 5, 5,  5,  5,  5)
             when (currentMode) {
                 "Classic" -> weights = classicWeights
                 "Linear" -> weights = linearWeights

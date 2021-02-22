@@ -20,7 +20,7 @@
             <solid android:color="@color/colorPrimary" />
             <stroke
                 android:width="1dip"
-                android:color="@color/colorPrimaryDark" />
+                android:color="@color/colorBlack" />
             <padding
                 android:bottom="@dimen/default_gap"
                 android:left="@dimen/default_gap"

@@ -403,12 +403,14 @@ class MainActivity : AppCompatActivity() {
             playerScores.add(player4Pts)
 
         playerScores.forEachIndexed{index, tv ->
-            tv.text = game.players[index].points.toString()
+            val points = game.players[index].points.toString()
+            val wins = game.players[index].countCorrect()
+            tv.text = "$points ($wins)"
         }
 
         // Update Titles:
-        callTitle.text = "Calls (Table: ${game.getCallsSum()})"
-        winTitle.text = "Wins (Table: ${game.getWinsSum()})"
+        callTitle.text = "Table Calls (${game.getCallsSum()})"
+        winTitle.text = "Table Wins (${game.getWinsSum()})"
 
         if (game.isFinished()) {
             val winner = game.findWinnerPlayer()

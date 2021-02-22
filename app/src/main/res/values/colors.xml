@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#FB206A</color>
-    <color name="colorPrimaryDark">#AF174B</color>
-    <color name="colorAccent">#F3588D</color>
+    <color name="colorPrimary">#FB2020</color>
+    <color name="colorPrimaryDark">#AF1717</color>
+    <color name="colorAccent">#F35858</color>
     <color name="colorHandLight">#FFF27C</color>
     <color name="colorHandDark">#937418</color>
-    <color name="colorSelected">#FFA4C3</color>
-    <color name="colorIdle">#FFD0E0</color>
+    <color name="colorSelected">#FFA4A4</color>
+    <color name="colorIdle">#F3F3F3</color>
     <color name="colorWhite">#FFFFFF</color>
-    <color name="colorBlack">#393939</color>
+    <color name="colorBlack">#252525</color>
 </resources>
